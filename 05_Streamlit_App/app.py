@@ -1,15 +1,14 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import google.generativeai as genai
+from openai import OpenAI
 
-df = pd.read_csv('dealer_kpi_with_anomalies.csv')
-df_dealers = pd.read_csv('dealer_master.csv')
+df = pd.read_csv('05_Streamlit_App/dealer_kpi_with_anomalies.csv')
+df_dealers = pd.read_csv('05_Streamlit_App/dealer_master.csv')
 df['month'] = pd.to_datetime(df['month'])
 df = df.merge(df_dealers[['dealer_id', 'city', 'region', 'dealer_type']], on='dealer_id', how='left')
 
-genai.configure(api_key="AIzaSyD8Ab8RN6L8gNbPnc_IZVBhDXkRY-teFrTaVo8OepZRR66IjT2Pbw")
-gemini_model = genai.GenerativeModel("gemini-pro")
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 st.set_page_config(page_title="Dealer Performance AI", layout="wide")
 st.title("Dealer Performance Intelligence System")
