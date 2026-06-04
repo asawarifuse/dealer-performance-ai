@@ -1,0 +1,78 @@
+# Data Dictionary — Dealer Performance Intelligence System
+
+## Dataset Overview
+- **Total Dealers:** 500
+- **Time Period:** January 2023 to December 2024 (24 months)
+- **Total Records:** 12,000 rows
+- **Key Performance Indicators:** 11
+
+---
+
+## File 1: dealer_master.csv
+
+| Column | Description | Data Type | Example |
+|:---|:---|:---|:---|
+| dealer_id | Unique dealer identifier | String | D001 |
+| dealer_name | Dealer business name | String | AutoWorld 1 |
+| city | City of operation | String | Mumbai |
+| region | Geographic region | String | West |
+| state | Indian state | String | Maharashtra |
+| established_year | Year dealership was established | Integer | 2005 |
+| dealer_type | Type of dealership facility | String | 3S Facility |
+| owner_name | Owner name | String | Owner 1 |
+
+---
+
+## File 2: dealer_monthly_kpi.csv / dealer_kpi_with_anomalies.csv
+
+| Column | Description | Unit | Range | Target |
+|:---|:---|:---|:---|:---|
+| dealer_id | Unique dealer identifier | — | D001-D500 | — |
+| month | Month of record | Date | Jan 2023 - Dec 2024 | — |
+| model_wise_cr | Model-wise conversion ratio (ETBR funnel) | Percentage | 5-70 | >35% |
+| sales_advisor_cr | Sales advisor-wise conversion ratio | Percentage | 3-65 | >30% |
+| market_share | Market share (RTO/city wise) | Percentage | 1-40 | >15% |
+| ssi | Sales Satisfaction Index | Score (50-100) | 50-100 | >85 |
+| csat | Customer Satisfaction score | Rating (2.0-5.0) | 2.0-5.0 | >4.0 |
+| monthly_sales | Total units sold in month | Count | 5-350 | >100 |
+| booking_pipeline | Orders booked but not delivered | Count | 2-280 | >70 |
+| accessories_per_car | Average accessories revenue per vehicle | INR | 500-18,000 | >5,000 |
+| monthly_accessories_sales | Total accessories revenue | INR | 5,000-2,500,000 | >500,000 |
+| cptv | Complaints per thousand vehicles | Count | 0.1-15 | <3 |
+| tat_complaint_resolution | Turnaround time for complaint resolution | Days | 0.5-20 | <5 |
+
+---
+
+## Additional Columns in dealer_kpi_with_anomalies.csv
+
+| Column | Description | Values |
+|:---|:---|:---|
+| composite_score | Weighted performance score (0-100) | 0-100 |
+| anomaly | Anomaly flag from Isolation Forest | -1 (Anomaly), 1 (Normal) |
+| anomaly_label | Human-readable anomaly label | "Anomaly", "Normal" |
+
+---
+
+## Composite Score Weights
+
+| KPI | Weight | Direction |
+|:---|:---|:---|
+| model_wise_cr | 15% | Higher is better |
+| sales_advisor_cr | 15% | Higher is better |
+| market_share | 10% | Higher is better |
+| ssi | 10% | Higher is better |
+| csat | 10% | Higher is better |
+| monthly_sales | 10% | Higher is better |
+| booking_pipeline | 5% | Higher is better |
+| accessories_per_car | 5% | Higher is better |
+| monthly_accessories_sales | 5% | Higher is better |
+| cptv | 10% | Lower is better |
+| tat_complaint_resolution | 5% | Lower is better |
+
+---
+
+## Dataset Characteristics
+- **Seasonality:** Festival months (Oct-Nov) have 15-35% sales boost; Summer months (Apr-May) have 5-15% slowdown
+- **Problem Dealers:** 60 out of 500 dealers exhibit gradual performance decline
+- **Sudden Anomalies:** Random 15% chance of sudden KPI drops for problem dealers
+- **Seed:** 42 (fully reproducible)
