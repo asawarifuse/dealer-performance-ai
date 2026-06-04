@@ -1,0 +1,45 @@
+# Methodology — Dealer Performance Intelligence System
+
+## Research Objective
+To build an AI-powered dealer performance monitoring system that not only identifies underperforming dealers but explains why and recommends specific interventions.
+
+## Data Generation
+- Synthetic dataset generated using Python with NumPy and Pandas
+- 500 dealers, 24 months, 11 KPIs, 12,000 total rows
+- Seed 42 for reproducibility
+- Realistic patterns: seasonality, gradual decline, sudden anomalies
+
+## Composite Scoring Engine
+- All 11 KPIs normalized to 0-100 scale
+- Weighted average based on business importance
+- Negative KPIs (CPTV, TAT) reverse-normalized
+
+## Anomaly Detection
+- Algorithm: Isolation Forest
+- Contamination rate: 5%
+- Features: All 11 KPIs + composite score
+
+## Explainability (XAI)
+- Model: XGBoost Classifier
+- Explanation method: SHAP (SHapley Additive exPlanations)
+- Output: Feature importance ranking, summary plots
+
+## Counterfactual Recommendations
+- Library: DiCE (Diverse Counterfactual Explanations)
+- Base model: Random Forest Classifier
+- Output: Minimal changes required to flip anomaly → normal
+
+## Dashboard
+- Tool: Power BI Desktop
+- Pages: 5 (Executive Summary, Dealer Deep Dive, Dealer Comparison, Anomaly Center, AI Assistant)
+
+## Web Application
+- Framework: Streamlit
+- AI Model: Google Gemini 2.0 Flash
+- Hosting: Streamlit Community Cloud
+
+## References
+- Liu, F. T., Ting, K. M., & Zhou, Z. H. (2008). Isolation Forest. ICDM.
+- Lundberg, S. M., & Lee, S. I. (2017). SHAP. NeurIPS.
+- Mothilal, R. K., Sharma, A., & Tan, C. (2020). DiCE. ACM FAT.
+- Chen, T., & Guestrin, C. (2016). XGBoost. KDD.
