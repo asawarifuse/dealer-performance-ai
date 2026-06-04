@@ -3,8 +3,8 @@ import pandas as pd
 import plotly.express as px
 
 
-df = pd.read_csv('dealer_kpi_with_anomalies.csv')
-df_dealers = pd.read_csv('dealer_master.csv')
+df = pd.read_csv('05_Streamlit_App/dealer_kpi_with_anomalies.csv')
+df_dealers = pd.read_csv('05_Streamlit_App/dealer_master.csv')
 df['month'] = pd.to_datetime(df['month'])
 df = df.merge(df_dealers[['dealer_id', 'city', 'region', 'dealer_type']], on='dealer_id', how='left')
 
