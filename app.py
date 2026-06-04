@@ -137,7 +137,7 @@ elif page == "AI Assistant":
                     prompt = f"You are a dealer performance analyst. {ctx}\nUser: {user_input}\nAnswer concisely."
                     response = gemini_model.generate_content(prompt)
                     reply = response.text
-                                except Exception as e:
+                except Exception as e:
                     reply = f"Error: {str(e)}"
                 st.markdown(reply)
         st.session_state.messages.append({"role": "assistant", "content": reply})
