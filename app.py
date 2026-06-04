@@ -8,9 +8,8 @@ df_dealers = pd.read_csv('dealer_master.csv')
 df['month'] = pd.to_datetime(df['month'])
 df = df.merge(df_dealers[['dealer_id', 'city', 'region', 'dealer_type']], on='dealer_id', how='left')
 
-genai.configure(api_key="AIzaSyD8Ab8RN6L8gNbPnc_IZVBhDXkRY-teFrTaVo8OepZRR66IjT2Pbw")
-gemini_model = genai.GenerativeModel("gemini-pro")
-
+genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
+gemini_model = genai.GenerativeModel("gemini-2.0-flash")
 st.set_page_config(page_title="Dealer Performance AI", layout="wide")
 st.title("Dealer Performance Intelligence System")
 st.caption("AI-Powered Analytics | 500 Dealers | 11 KPIs")
