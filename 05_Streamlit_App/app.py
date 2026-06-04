@@ -1,15 +1,16 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import google.generativeai as genai
+
 
 df = pd.read_csv('dealer_kpi_with_anomalies.csv')
 df_dealers = pd.read_csv('dealer_master.csv')
 df['month'] = pd.to_datetime(df['month'])
 df = df.merge(df_dealers[['dealer_id', 'city', 'region', 'dealer_type']], on='dealer_id', how='left')
 
-genai.configure(api_key="AIzaSyD8Ab8RN6L8gNbPnc_IZVBhDXkRY-teFrTaVo8OepZRR66IjT2Pbw")
-gemini_model = genai.GenerativeModel("gemini-pro")
+from openai import OpenAI
+
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 st.set_page_config(page_title="Dealer Performance AI", layout="wide")
 st.title("Dealer Performance Intelligence System")
@@ -136,9 +137,15 @@ elif page == "AI Assistant":
                 try:
                     ctx = f"Dealers: {total_dealers}. Sales: {total_sales}. Avg Score: {avg_score}. Anomalies: {anomaly_count} ({anomaly_pct}%). KPIs: model_wise_cr, sales_advisor_cr, market_share, SSI, CSAT, monthly_sales, booking_pipeline, accessories_per_car, CPTV, TAT."
                     prompt = f"You are a dealer performance analyst. {ctx}\nUser: {user_input}\nAnswer concisely."
-                    response = gemini_model.generate_content(prompt)
-                    reply = response.text
-                except:
-                    reply = "AI unavailable. Check dashboard tabs for insights."
+                    response = client.chat.completions.create(
+                        model="gpt-4o",
+                        messages=[
+                            {"role": "system", "content": "You are a dealer performance analyst. Answer concisely with data-driven insights."},
+                            {"role": "user", "content": prompt}
+                        ]
+                    )
+                    reply = response.choices[0].message.content
+                except Exception as e:
+                    reply = f"Error: {str(e)}"
                 st.markdown(reply)
         st.session_state.messages.append({"role": "assistant", "content": reply})
